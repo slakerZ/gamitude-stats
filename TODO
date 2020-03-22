@@ -1,5 +1,14 @@
 TODO:
     -deployment stuff
     -postman
-    -controllers
-    -services
+    -controllers:
+        -energy get create
+        -projectUsage <?also break?> create 
+        -diagrams(analyze)
+        -ranks get create?
+        -?User->init new user // update user data name, email
+    -services:
+        -energy
+        -projectUsage
+        -ranks
+        -user

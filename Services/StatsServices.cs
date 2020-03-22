@@ -19,8 +19,8 @@ namespace StatsApi.Services
             _Stats = database.GetCollection<Stats>(settings.StatsCollectionName);
         }
 
-        public List<Stats> GetStatsByUserId(string userId) =>
-            _Stats.Find<Stats>(Stats => Stats.UserId == userId).ToList();
+        public Stats GetStatsByUserId(string userId) =>
+            _Stats.Find<Stats>(Stats => Stats.UserId == userId).FirstOrDefault();
 
         public Stats Get(string id) =>
             _Stats.Find<Stats>(Stats => Stats.Id == id).FirstOrDefault();
