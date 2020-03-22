@@ -3,7 +3,7 @@ TODO:
     -postman
     -controllers:
         -energy get create
-        -projectUsage <?also break?> create 
+        -timeController time spend as one kiss
         -diagrams(analyze)
         -ranks get create?
         -?User->init new user // update user data name, email
