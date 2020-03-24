@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -18,7 +19,7 @@ namespace StatsApi.Models
         public string BreakId { get; set; }
 
         [BsonElement("timeSpend")]
-        public int TimeSpend { get; set; }
+        public int Duration { get; set; }
         
         [BsonElement("dominantStat")]
         public STATS DominantStat { get; set; }
@@ -26,10 +27,43 @@ namespace StatsApi.Models
         [BsonElement("stats")]
         public STATS[] Stats { get; set; }
 
-        public int[] getWages()
+        public Dictionary<STATS,int> getWages()
         {
-            //TODO calculate wages [Body,Mind,Soul,Emotional]
-            return [3,1,1,0];
+            Dictionary<STATS,int> wageMap = new Dictionary<STATS, int>();
+            int dominantStat = 0;
+            int stat = 0;
+            switch(Stats.GetLength(0))
+            {
+                case 1:
+                stat=0;
+                dominantStat=1;
+                break;
+                case 2:
+                stat=3;
+                dominantStat=4;
+                break;
+                case 3:
+                stat=2;
+                dominantStat=3;
+                break;
+                case 4:
+                stat=2;
+                dominantStat=4;
+                break;
+
+            }
+            foreach (var s in Stats )
+            {
+                if (s == DominantStat)
+                {
+                    wageMap.Add(s,dominantStat);
+                }
+                else
+                {
+                    wageMap.Add(s,stat);
+                }
+            }
+            return wageMap;
         }
 
     }
