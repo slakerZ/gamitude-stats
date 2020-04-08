@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -70,7 +71,12 @@ namespace gamitude_stats
                 sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             //DATABASE SERVICES
-            services.AddScoped<StatsService>();
+            //TODO Add Interfaces
+            services.AddScoped<DailyStats>();
+            services.AddScoped<TimeSpend>();
+
+            services.AddHttpClient();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers().AddJsonOptions(opt =>
                 {

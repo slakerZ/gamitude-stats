@@ -15,14 +15,14 @@ namespace StatsApi.Models
         [BsonElement("projectId")]
         public string ProjectId { get; set; }
 
-        [BsonElement("breakId")]
-        public string BreakId { get; set; }
+        [BsonElement("projectType")]
+        public PROJECT_TYPE? ProjectType { get; set; }
 
         [BsonElement("timeSpend")]
         public int Duration { get; set; }
         
         [BsonElement("dominantStat")]
-        public STATS DominantStat { get; set; }
+        public STATS? DominantStat { get; set; }
 
         [BsonElement("stats")]
         public STATS[] Stats { get; set; }

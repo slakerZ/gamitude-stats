@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace StatsApi.Models 
 {
     [BsonIgnoreExtraElements]
-    public class Energy
+    public class DailyEnergy
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -30,6 +30,9 @@ namespace StatsApi.Models
         [BsonElement("emotional")]
         [Range(0, 100, ErrorMessage = "Emotional energy value must be between 0 and 100")]
         public int Emotional { get; set; }
+
+        [BsonElement("date")]
+        public DateTime Date { get; set; } // DateTime.Date
 
     }
 }

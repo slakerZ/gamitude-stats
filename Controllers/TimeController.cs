@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProjectsApi.Dto.TimeSpend;
+using StatsApi.BusinessLogic;
+using StatsApi.Dto;
 using StatsApi.Models;
 using StatsApi.Services;
 
@@ -20,43 +23,20 @@ namespace StatsApi.Controllers
 
         private readonly ILogger<StatsController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly StatsService _statsService;
+        private readonly ITimeManager _timeManager;
 
-        public TimeController(ILogger<StatsController> logger, IHttpContextAccessor httpContextAccessor,StatsService statsService)
+        public TimeController(ILogger<StatsController> logger, IHttpContextAccessor httpContextAccessor
+                                ,ITimeManager timeManager)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
-            _statsService = statsService;
+            _timeManager = timeManager;
         }
-
-        [HttpGet]
-        public ActionResult<Stats> Get()
-        {
-            string userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name).ToString();
-            if (null != userId)
-            {
-                return _statsService.GetStatsByUserId(userId);
-            }
-            else
-            {
-                return NotFound("User Failure");
-
-            }
-        }
+//RETURN STATUS CLASS????
         [HttpPost]
-        public ActionResult<Stats> Create(Stats stats)
+        public ActionResult<ControllerResponse<CreateTimeSpend>> Create(CreateTimeSpend timeSpend)
         {
-            string userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name).ToString();
-            if (null != userId)
-            {
-                stats.UserId = userId;
-                _statsService.Create(stats);
-                return CreatedAtRoute("Create Stats", new { id = stats.Id.ToString() }, stats);
-            }
-            else
-            {
-                return NotFound("User Failure");
-            }
+            return Ok();
         }
 
     }
