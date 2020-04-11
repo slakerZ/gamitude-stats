@@ -12,6 +12,9 @@ namespace StatsApi.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        [BsonElement("userId")]
+        public string UserId { get; set; }
+        
         [BsonElement("projectId")]
         public string ProjectId { get; set; }
 

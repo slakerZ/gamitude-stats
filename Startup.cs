@@ -17,6 +17,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProjectsApi.Helpers;
+using StatsApi.BusinessLogic;
+using StatsApi.Helpers;
 using StatsApi.Models;
 using StatsApi.Services;
 
@@ -71,17 +73,24 @@ namespace gamitude_stats
                 sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             //DATABASE SERVICES
-            //TODO Add Interfaces
-            services.AddScoped<DailyStats>();
-            services.AddScoped<TimeSpend>();
+            services.AddScoped<IDailyEnergyService,DailyEnergyService>();
+            services.AddScoped<IDailyStatsService,DailyStatsService>();
+            services.AddScoped<ITimeSpendService,TimeSpendService>();
+
+            //BUSINESSLOGIC SERVICES
+            services.AddScoped<ITimeManager,TimeManager>();
+
 
             services.AddHttpClient();
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddRouting(options => options.LowercaseUrls = true); // all routing to lowerCase
+
             services.AddControllers().AddJsonOptions(opt =>
                 {
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });;
+                });
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,11 +100,15 @@ namespace gamitude_stats
             {
                 app.UseDeveloperExceptionPage();
             }
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             // app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

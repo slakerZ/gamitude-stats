@@ -3,10 +3,26 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
+using StatsApi.Helpers;
 
 namespace StatsApi.Services
 {
-    public class TimeSpendService
+
+    public interface ITimeSpendService
+    {
+        TimeSpend GetTimeSpendByProjectId(String userId);
+        TimeSpend Get(String id);
+        TimeSpend Create(TimeSpend timeSpend);
+        Task<TimeSpend> CreateAsync(TimeSpend timeSpend);
+        void Update(TimeSpend timeSpend);
+        void Remove(TimeSpend timeSpend);
+        void Remove(string id);
+
+
+    }
+
+    public class TimeSpendService : ITimeSpendService
     {
         private readonly IMongoCollection<TimeSpend> _TimeSpend;
 
@@ -31,13 +47,20 @@ namespace StatsApi.Services
             return TimeSpend;
         }
 
-        public void Update(string id, TimeSpend ProjectIn) =>
-            _TimeSpend.ReplaceOne(TimeSpend => TimeSpend.Id == id, ProjectIn);
+        public async Task<TimeSpend> CreateAsync(TimeSpend TimeSpend)
+        {
+            await _TimeSpend.InsertOneAsync(TimeSpend);
+            return TimeSpend;
+        }
 
-        public void Remove(TimeSpend ProjectIn) =>
-            _TimeSpend.DeleteOne(TimeSpend => TimeSpend.Id == ProjectIn.Id);
+        public void Update(TimeSpend timeSpend) =>
+            _TimeSpend.ReplaceOne(TimeSpend => TimeSpend.Id == timeSpend.Id, timeSpend);
+
+        public void Remove(TimeSpend timeSpend) =>
+            _TimeSpend.DeleteOne(TimeSpend => TimeSpend.Id == timeSpend.Id);
 
         public void Remove(string id) => 
             _TimeSpend.DeleteOne(TimeSpend => TimeSpend.Id == id);
+
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace StatsApi.Models
+namespace StatsApi.Helpers
 {
     public class DatabaseSettings : IDatabaseSettings
     {

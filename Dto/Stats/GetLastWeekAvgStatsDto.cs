@@ -1,10 +1,7 @@
-namespace ProjectsApi.Dto.Stast
+namespace ProjectsApi.Dto.Stats
 {
-    public class SendDailyStats
+    public class GetLastWeekAvgStatsDto
     {
-
-        public string UserId { get; set; }
-
         public int Strength { get; set; }
 
         public int Intelligence { get; set; }

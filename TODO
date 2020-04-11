@@ -1,14 +1,6 @@
 TODO:
     -deployment stuff
     -postman
-    -controllers:
-        -energy get create
-        -timeController time spend as one kiss
-        -diagrams(analyze)
-        -ranks get create?
-        -?User->init new user // update user data name, email
-    -services:
-        -energy
-        -projectUsage
-        -ranks
-        -user
+    -update energy on read updated field??
+    -calculate AVG before send
+    -on create dailyEnergy set energy for max ?? 

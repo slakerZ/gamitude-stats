@@ -1,5 +1,4 @@
 using AutoMapper;
-using ProjectsApi.Dto.Stast;
 using ProjectsApi.Dto.TimeSpend;
 using StatsApi.Models;
 
@@ -11,8 +10,7 @@ namespace error_interface
         {
             //TimeSpend
             CreateMap<CreateTimeSpend, TimeSpend>();      
-            //DailyStats      
-            CreateMap<DailyStats, SendDailyStats>();            
+            CreateMap<TimeSpend,GetTimeSpend>();      
         }        
     }
 }   

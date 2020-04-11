@@ -3,10 +3,10 @@ namespace StatsApi.Dto
 {
     public class ControllerResponse<T>
     {
-        public T Data { get; set; }
+        public T data { get; set; }
 
-        public bool Success { get; set; } = true;
+        public bool success { get; set; } = true;
 
-        public string Message { get; set; } = null;
+        public string message { get; set; } = null;
     }
 }
