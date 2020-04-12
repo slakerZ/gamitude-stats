@@ -4,12 +4,12 @@ resources:
 queue:
   name: Hosted Ubuntu 1604
 trigger:
-- testing
+- master
 variables:
   TargetFramework: 'netcoreapp3.1'
   RestoreBuildProjects: '*.csproj'
   BuildConfiguration: 'Release'
-  DockerImageName: 'gentle-ally-270120/pro'
+  DockerImageName: 'gentle-ally-270120/stats'
 steps:
 - task: DotNetCoreCLI@2
   displayName: Restore
@@ -39,7 +39,7 @@ steps:
   displayName: 'Lock image version in deployment.yaml'
   inputs:
     filename: /bin/bash
-    arguments: '-c "awk ''{gsub(\"PRO_IMAGE\", \"gcr.io/$(DockerImageName):$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
+    arguments: '-c "awk ''{gsub(\"STATS_IMAGE\", \"gcr.io/$(DockerImageName):$(Build.BuildId)\", $0); print}'' deployment.yaml > $(build.artifactstagingdirectory)/deployment.yaml"'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:

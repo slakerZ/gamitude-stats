@@ -42,17 +42,17 @@ namespace StatsApi.Services
 
         public Task<GetLastWeekAvgEnergyDto> GetLastWeekAvgEnergyByUserIdAsync(String userId)
         {
-           return _DailyEnergy.AsQueryable()
-                .Where(o => o.UserId == userId && o.Date > DateTime.UtcNow.Date.AddDays(-7))
-                .GroupBy(o => o.UserId)
-                .Select(o => new GetLastWeekAvgEnergyDto
-                {
-                    Body = o.Sum(o => o.Body),
-                    Mind = o.Sum(o => o.Mind),
-                    Emotional = o.Sum(o => o.Emotional),
-                    Soul = o.Sum(o => o.Soul)
+            return _DailyEnergy.AsQueryable()
+                 .Where(o => o.UserId == userId && o.Date > DateTime.UtcNow.Date.AddDays(-7))
+                 .GroupBy(o => o.UserId)
+                 .Select(o => new GetLastWeekAvgEnergyDto
+                 {
+                     Body = o.Sum(o => o.Body),
+                     Mind = o.Sum(o => o.Mind),
+                     Emotional = o.Sum(o => o.Emotional),
+                     Soul = o.Sum(o => o.Soul)
 
-                }).FirstOrDefaultAsync();
+                 }).FirstOrDefaultAsync();
         }
 
         public DailyEnergy GetDailyEnergyByUserId(String userId) =>
@@ -61,6 +61,25 @@ namespace StatsApi.Services
         public DailyEnergy Get(String id) =>
             _DailyEnergy.Find<DailyEnergy>(o => o.Id == id).FirstOrDefault();
 
+        private DailyEnergy initDailyEnergy(DailyEnergy dailyEnergy)
+        {
+            DailyEnergy newDEnergy = new DailyEnergy
+            {
+                Body = 1440,
+                Emotional = 1440,
+                Soul = 1440,
+                Mind = 1440
+            };
+            return mergeDailyEnergy(dailyEnergy,newDEnergy);
+        }
+        private DailyEnergy mergeDailyEnergy(DailyEnergy dailyEnergy, DailyEnergy oldDEnergy)   //TODO in autoMapper
+        {
+            dailyEnergy.Body += oldDEnergy.Body;
+            dailyEnergy.Emotional += oldDEnergy.Emotional;
+            dailyEnergy.Mind += oldDEnergy.Mind;
+            dailyEnergy.Soul += oldDEnergy.Soul;
+            return dailyEnergy;
+        }
         public async Task<DailyEnergy> CreateOrAddAsync(DailyEnergy dailyEnergy)
         {
             try
@@ -68,15 +87,12 @@ namespace StatsApi.Services
                 var oldDEnergy = await _DailyEnergy.Find(o => o.Date == dailyEnergy.Date && o.UserId == dailyEnergy.UserId).SingleOrDefaultAsync();
                 if (null == oldDEnergy)
                 {//Create
-                    await _DailyEnergy.InsertOneAsync(dailyEnergy);
+                    await _DailyEnergy.InsertOneAsync(initDailyEnergy(dailyEnergy));
                 }
                 else
                 {//Update   //TODO use mapper for adding
                     dailyEnergy.Id = oldDEnergy.Id;
-                    dailyEnergy.Body += oldDEnergy.Body;
-                    dailyEnergy.Emotional += oldDEnergy.Emotional;
-                    dailyEnergy.Mind += oldDEnergy.Mind;
-                    dailyEnergy.Soul += oldDEnergy.Soul;
+                    dailyEnergy = mergeDailyEnergy(dailyEnergy,oldDEnergy);
                     await UpdateAsync(dailyEnergy);
                 }
                 return dailyEnergy;

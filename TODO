@@ -3,4 +3,4 @@ TODO:
     -postman
     -update energy on read updated field??
     -calculate AVG before send
-    -on create dailyEnergy set energy for max ?? 
+    -add validator to collection or validate in software  
