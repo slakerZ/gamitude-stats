@@ -33,7 +33,7 @@ namespace StatsApi.Services
         private readonly IMongoCollection<DailyStats> _DailyStats;
         private readonly ILogger<DailyStatsService> _logger;
 
-        public DailyStatsService(IDatabaseSettings settings,ILogger<DailyStatsService> logger)
+        public DailyStatsService(IDatabaseSettings settings, ILogger<DailyStatsService> logger)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
@@ -42,19 +42,20 @@ namespace StatsApi.Services
             _logger = logger;
         }
 
-        public Task<GetLastWeekAvgStatsDto> GetLastWeekAvgStatsByUserIdAsync(String userId)
+        public async Task<GetLastWeekAvgStatsDto> GetLastWeekAvgStatsByUserIdAsync(String userId)
         {
-           return _DailyStats.AsQueryable()
-                .Where(o => o.UserId == userId && o.Date > DateTime.UtcNow.Date.AddDays(-7))
-                .GroupBy(o => o.UserId)
-                .Select(o => new GetLastWeekAvgStatsDto
-                {
-                    Creativity = o.Sum(o => o.Creativity),
-                    Fluency = o.Sum(o => o.Fluency),
-                    Intelligence = o.Sum(o => o.Intelligence),
-                    Strength = o.Sum(o => o.Strength)
+            GetLastWeekAvgStatsDto stats = await _DailyStats.AsQueryable()
+                 .Where(o => o.UserId == userId && o.Date > DateTime.UtcNow.Date.AddDays(-7))
+                 .GroupBy(o => o.UserId)
+                 .Select(o => new GetLastWeekAvgStatsDto
+                 {
+                     Creativity = o.Sum(o => o.Creativity),
+                     Fluency = o.Sum(o => o.Fluency),
+                     Intelligence = o.Sum(o => o.Intelligence),
+                     Strength = o.Sum(o => o.Strength)
 
-                }).FirstOrDefaultAsync();
+                 }).FirstOrDefaultAsync();
+            return stats.weekAvg();
         }
 
 
@@ -104,7 +105,7 @@ namespace StatsApi.Services
         public async Task UpdateAsync(DailyStats dailyStats) =>
             await _DailyStats.ReplaceOneAsync(o => o.Id == dailyStats.Id, dailyStats);
         public void Remove(DailyStats dailyStats) =>
-            _DailyStats.DeleteOne(o =>o.Id == dailyStats.Id);
+            _DailyStats.DeleteOne(o => o.Id == dailyStats.Id);
 
         public void Remove(string id) =>
             _DailyStats.DeleteOne(o => o.Id == id);

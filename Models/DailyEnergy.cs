@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace StatsApi.Models 
+namespace StatsApi.Models
 {
     [BsonIgnoreExtraElements]
     public class DailyEnergy
@@ -16,25 +16,33 @@ namespace StatsApi.Models
         public string UserId { get; set; }
 
         [BsonElement("mind")]
-        [Range(0, 1440, ErrorMessage = "Mind energy time value must be between 0 and 1440")]
         public int Mind { get; set; }
 
         [BsonElement("soul")]
-        [Range(0, 1440, ErrorMessage = "Soul energy time value must be between 0 and 1440")]
         public int Soul { get; set; }
 
         [BsonElement("body")]
-        [Range(0, 1440, ErrorMessage = "Body energy time value must be between 0 and 1440")]
         public int Body { get; set; }
 
         [BsonElement("emotional")]
-        [Range(0, 1440, ErrorMessage = "Emotional energy time value must be between 0 and 1440")]
         public int Emotional { get; set; }
 
         [BsonElement("date")]
         public DateTime Date { get; set; }
 
+        public DailyEnergy validate()
+        {
+            if (this.Body > 1440) this.Body = 1440;
+            else if (this.Body < 0) this.Body = 0;
+            if (this.Soul > 1440) this.Soul = 1440;
+            else if (this.Soul < 0) this.Soul = 0;
+            if (this.Emotional > 1440) this.Emotional = 1440;
+            else if (this.Emotional < 0) this.Emotional = 0;
+            if (this.Mind > 1440) this.Mind = 1440;
+            else if (this.Mind < 0) this.Mind = 0;
+            return this;
+        }
     }
 
-    
+
 }

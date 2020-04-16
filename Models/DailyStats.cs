@@ -16,24 +16,32 @@ namespace StatsApi.Models
         public string UserId { get; set; }
 
         [BsonElement("strength")]
-        [Range(0, 1440, ErrorMessage = "Strength stat time value must be between 0 and 1440")]
         public int Strength { get; set; }
 
         [BsonElement("intelligence")]
-        [Range(0, 1440, ErrorMessage = "Intelligence stat time value must be between 0 and 1440")]
         public int Intelligence { get; set; }
 
         [BsonElement("fluency")]
-        [Range(0, 1440, ErrorMessage = "Fluency stat time value must be between 0 and 1440")]
         public int Fluency { get; set; }
 
         [BsonElement("creativity")]
-        [Range(0, 1440, ErrorMessage = "Creativity stat time value must be between 0 and 1440")]
         public int Creativity { get; set; }
 
         [BsonElement("date")]
         public DateTime Date { get; set; }
 
+        public DailyStats validate()
+        {
+            if (this.Creativity > 1440) this.Creativity = 1440;
+            else if (this.Creativity < 0) this.Creativity = 0;
+            if (this.Fluency > 1440) this.Fluency = 1440;
+            else if (this.Fluency < 0) this.Fluency = 0;
+            if (this.Intelligence > 1440) this.Intelligence = 1440;
+            else if (this.Intelligence < 0) this.Intelligence = 0;
+            if (this.Strength > 1440) this.Strength = 1440;
+            else if (this.Strength < 0) this.Strength = 0;
+            return this;
+        }
     }
     
 }

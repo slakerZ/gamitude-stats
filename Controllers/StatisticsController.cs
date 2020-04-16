@@ -33,7 +33,7 @@ namespace StatsApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<ControllerResponse<GetLastWeekAvgStatsDto>>> GetStats()
+        public async Task<ActionResult<ControllerResponse<GetLastWeekAvgStatsDto>>> stats()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace StatsApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ControllerResponse<GetLastWeekAvgEnergyDto>>> GetEnergy()
+        public async Task<ActionResult<ControllerResponse<GetLastWeekAvgEnergyDto>>> energy()
         {
             try
             {
