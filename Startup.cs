@@ -1,25 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProjectsApi.Helpers;
 using StatsApi.BusinessLogic;
 using StatsApi.Helpers;
-using StatsApi.Models;
 using StatsApi.Services;
 
 namespace gamitude_stats
@@ -38,11 +32,10 @@ namespace gamitude_stats
         {
             Console.WriteLine("starting");
             //ADDITIONAL SETTINGS
-
             var appSettingsSection = Configuration.GetSection("AppSettings");
 
             services.Configure<AppSettings>(appSettingsSection);
-            services.AddHttpContextAccessor();
+
 
             //AUTHENTICATION
             // configure jwt authentication
@@ -73,15 +66,16 @@ namespace gamitude_stats
                 sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             //DATABASE SERVICES
-            services.AddScoped<IDailyEnergyService,DailyEnergyService>();
-            services.AddScoped<IDailyStatsService,DailyStatsService>();
-            services.AddScoped<ITimeSpendService,TimeSpendService>();
+            services.AddScoped<IDailyEnergyService, DailyEnergyService>();
+            services.AddScoped<IDailyStatsService, DailyStatsService>();
+            services.AddScoped<ITimeSpendService, TimeSpendService>();
 
             //BUSINESSLOGIC SERVICES
-            services.AddScoped<ITimeManager,TimeManager>();
+            services.AddScoped<ITimeManager, TimeManager>();
 
 
             services.AddHttpClient();
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddRouting(options => options.LowercaseUrls = true); // all routing to lowerCase
@@ -90,7 +84,7 @@ namespace gamitude_stats
                 {
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
-                
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

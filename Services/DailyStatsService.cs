@@ -24,9 +24,7 @@ namespace StatsApi.Services
         void Remove(DailyStats dailyStats);
         void Remove(string id);
 
-
     }
-
 
     public class DailyStatsService : IDailyStatsService
     {
@@ -54,8 +52,8 @@ namespace StatsApi.Services
                      Intelligence = o.Sum(o => o.Intelligence),
                      Strength = o.Sum(o => o.Strength)
 
-                 }).FirstOrDefaultAsync();
-            return stats.weekAvg();
+                 }).FirstOrDefaultAsync()?? new GetLastWeekAvgStatsDto();;
+            return stats.weekAvg().scaleToPercent();
         }
 
 

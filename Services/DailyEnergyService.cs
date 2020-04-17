@@ -26,7 +26,6 @@ namespace StatsApi.Services
 
     }
 
-
     public class DailyEnergyService : IDailyEnergyService
     {
         private readonly IMongoCollection<DailyEnergy> _DailyEnergy;
@@ -53,9 +52,9 @@ namespace StatsApi.Services
                      Emotional = o.Sum(o => o.Emotional),
                      Soul = o.Sum(o => o.Soul)
 
-                 }).FirstOrDefaultAsync();
-
-            return energy.weekAvg();
+                 }).FirstOrDefaultAsync() ?? new GetLastWeekAvgEnergyDto();
+                 
+            return energy.weekAvg().scaleToPercent();
         }
 
         public DailyEnergy GetDailyEnergyByUserId(String userId) =>
@@ -72,7 +71,7 @@ namespace StatsApi.Services
                 var oldDEnergy = await _DailyEnergy.Find(o => o.Date == dailyEnergy.Date && o.UserId == dailyEnergy.UserId).SingleOrDefaultAsync();
                 if (null == oldDEnergy)
                 {//Create
-                    await _DailyEnergy.InsertOneAsync(initDailyEnergy(dailyEnergy.validate()));
+                    await _DailyEnergy.InsertOneAsync(mergeDailyEnergy(dailyEnergy.validate(), new DailyEnergy().init()));
                 }
                 else
                 {//Update   //TODO use mapper for adding
@@ -108,18 +107,7 @@ namespace StatsApi.Services
         public void Remove(String id) =>
             _DailyEnergy.DeleteOne(o => o.Id == id);
 
-        private DailyEnergy initDailyEnergy(DailyEnergy dailyEnergy)
-        {
-            DailyEnergy newDEnergy = new DailyEnergy
-            {
-                Body = 1440,
-                Emotional = 1440,
-                Soul = 1440,
-                Mind = 1440
-            };
-            return mergeDailyEnergy(dailyEnergy, newDEnergy);
-        }
-        private DailyEnergy mergeDailyEnergy(DailyEnergy dailyEnergy, DailyEnergy oldDEnergy)   //TODO in autoMapper
+        private DailyEnergy mergeDailyEnergy(DailyEnergy dailyEnergy, DailyEnergy oldDEnergy) 
         {
             dailyEnergy.Body += oldDEnergy.Body;
             dailyEnergy.Emotional += oldDEnergy.Emotional;

@@ -1,13 +1,16 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using StatsApi.Helpers;
 
 namespace StatsApi.Models
 {
     [BsonIgnoreExtraElements]
     public class DailyStats
     {
+        private readonly int dayLenght = 1440;
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -32,16 +35,17 @@ namespace StatsApi.Models
 
         public DailyStats validate()
         {
-            if (this.Creativity > 1440) this.Creativity = 1440;
+            if (this.Creativity > dayLenght) this.Creativity = dayLenght;
             else if (this.Creativity < 0) this.Creativity = 0;
-            if (this.Fluency > 1440) this.Fluency = 1440;
+            if (this.Fluency > dayLenght) this.Fluency = dayLenght;
             else if (this.Fluency < 0) this.Fluency = 0;
-            if (this.Intelligence > 1440) this.Intelligence = 1440;
+            if (this.Intelligence > dayLenght) this.Intelligence = dayLenght;
             else if (this.Intelligence < 0) this.Intelligence = 0;
-            if (this.Strength > 1440) this.Strength = 1440;
+            if (this.Strength > dayLenght) this.Strength = dayLenght;
             else if (this.Strength < 0) this.Strength = 0;
             return this;
         }
+
     }
-    
+
 }

@@ -10,12 +10,6 @@ namespace StatsApi.Helpers
         public String ConnectionString { get; set; }
         public String DatabaseName { get; set; }
     }
-    //     public class ProjectsDatabaseSettingsEnv : IProjectsDatabaseSettings
-    // {
-    //     public String ProjectsCollectionName { get; set; }
-    //     public String ConnectionString { get; set; }
-    //     public String DatabaseName { get; set; }
-    // }
 
     public interface IDatabaseSettings
     {

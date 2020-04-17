@@ -57,6 +57,7 @@ namespace StatsApi.BusinessLogic
             DailyEnergy dailyEnergy = calculateEnergy(wages, timeSpend);
             dailyEnergy.UserId = timeSpend.UserId;
             dailyEnergy.Date = DateTime.UtcNow.Date;
+            _logger.LogInformation(dailyEnergy.ToString());
             await _dailyEnergyService.CreateOrAddAsync(dailyEnergy);
         }
         private async Task manageStatsAsync(Dictionary<STATS, int> wages, TimeSpend timeSpend)
