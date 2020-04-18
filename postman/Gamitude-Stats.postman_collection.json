@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "bc813b9b-c0ec-47be-b928-998c7cfde065",
+		"name": "Gamitude-Stats",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Statistics",
+			"item": [
+				{
+					"name": "Get Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5030/api/stats/statistics/stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5030",
+							"path": [
+								"api",
+								"stats",
+								"statistics",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Energy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5030/api/stats/statistics/energy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5030",
+							"path": [
+								"api",
+								"stats",
+								"statistics",
+								"energy"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Create Time Spend",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ProjectId\" : \"5e9231fbddf6d9150cc03a0b\",\n\t\"ProjectType\" : \"STATS\",\n\t\"Duration\" : 25,\n\t\"Stats\" : [\"STRENGTH\",\"CREATIVITY\"],\n\t\"DominantStat\" : \"STRENGTH\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5030/api/stats/time",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5030",
+					"path": [
+						"api",
+						"stats",
+						"time"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5030/api/stats/version",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5030",
+					"path": [
+						"api",
+						"stats",
+						"version"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2f59b3f4-0b17-4aee-8c12-f1ec92bdc7a0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1a0657b8-c487-49eb-a355-e4c4c01eacab",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
