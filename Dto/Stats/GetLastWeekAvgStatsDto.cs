@@ -6,7 +6,6 @@ namespace ProjectsApi.Dto.Stats
     public class GetLastWeekAvgStatsDto
     {
 
-        private readonly int dayLenght = 1440;
         public int Strength { get; set; }
 
         public int Intelligence { get; set; }
@@ -26,10 +25,10 @@ namespace ProjectsApi.Dto.Stats
 
         public GetLastWeekAvgStatsDto scaleToPercent()
         {
-            this.Creativity /= dayLenght / 100;
-            this.Fluency /= dayLenght / 100;
-            this.Intelligence /= dayLenght / 100;
-            this.Strength /= dayLenght / 100;
+            this.Creativity =(this.Creativity*100)/ StaticValues.dayLenght;
+            this.Fluency = (this.Fluency*100)/StaticValues.dayLenght;
+            this.Intelligence =(this.Intelligence*100)/ StaticValues.dayLenght;
+            this.Strength = (this.Strength *100)/StaticValues.dayLenght;
             return this;
         }
     }

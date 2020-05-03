@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -8,7 +9,6 @@ namespace StatsApi.Models
     [BsonIgnoreExtraElements]
     public class TimeSpend
     {
-        // private readonly int _wageMultiplier = 1;
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -32,6 +32,9 @@ namespace StatsApi.Models
         [BsonElement("stats")]
         public STATS[] Stats { get; set; }
 
+        /// <summary>
+        /// Calculates the wages. Values depends on how many stats u wanna boost.
+        /// </summary>
         public Dictionary<STATS, int> getWages()
         {
             Dictionary<STATS, int> wageMap = new Dictionary<STATS, int>();
