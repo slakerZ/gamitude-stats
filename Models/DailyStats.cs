@@ -10,7 +10,6 @@ namespace StatsApi.Models
     [BsonIgnoreExtraElements]
     public class DailyStats
     {
-        private readonly int dayLenght = 1440;
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -35,13 +34,13 @@ namespace StatsApi.Models
 
         public DailyStats validate()
         {
-            if (this.Creativity > dayLenght) this.Creativity = dayLenght;
+            if (this.Creativity > StaticValues.dayLenght) this.Creativity = StaticValues.dayLenght;
             else if (this.Creativity < 0) this.Creativity = 0;
-            if (this.Fluency > dayLenght) this.Fluency = dayLenght;
+            if (this.Fluency > StaticValues.dayLenght) this.Fluency = StaticValues.dayLenght;
             else if (this.Fluency < 0) this.Fluency = 0;
-            if (this.Intelligence > dayLenght) this.Intelligence = dayLenght;
+            if (this.Intelligence > StaticValues.dayLenght) this.Intelligence = StaticValues.dayLenght;
             else if (this.Intelligence < 0) this.Intelligence = 0;
-            if (this.Strength > dayLenght) this.Strength = dayLenght;
+            if (this.Strength > StaticValues.dayLenght) this.Strength = StaticValues.dayLenght;
             else if (this.Strength < 0) this.Strength = 0;
             return this;
         }

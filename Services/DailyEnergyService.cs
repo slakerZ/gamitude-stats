@@ -39,7 +39,9 @@ namespace StatsApi.Services
             _DailyEnergy = database.GetCollection<DailyEnergy>(settings.DailyEnergyCollectionName);
             _logger = logger;
         }
-
+        /// <summary>
+        /// Gets last weeks energy counting the days for further calculations
+        /// </summary>
         public async Task<GetLastWeekAvgEnergyDto> GetLastWeekAvgEnergyByUserIdAsync(String userId)
         {
             GetLastWeekAvgEnergyDto energy = await _DailyEnergy.AsQueryable()
@@ -49,8 +51,9 @@ namespace StatsApi.Services
                  {
                      Body = o.Sum(o => o.Body),
                      Mind = o.Sum(o => o.Mind),
-                     Emotional = o.Sum(o => o.Emotional),
-                     Soul = o.Sum(o => o.Soul)
+                     Emotions = o.Sum(o => o.Emotions),
+                     Soul = o.Sum(o => o.Soul),
+                     dayCount = o.Sum(o => 1)
 
                  }).FirstOrDefaultAsync() ?? new GetLastWeekAvgEnergyDto();
                  
@@ -71,7 +74,7 @@ namespace StatsApi.Services
                 var oldDEnergy = await _DailyEnergy.Find(o => o.Date == dailyEnergy.Date && o.UserId == dailyEnergy.UserId).SingleOrDefaultAsync();
                 if (null == oldDEnergy)
                 {//Create
-                    await _DailyEnergy.InsertOneAsync(mergeDailyEnergy(dailyEnergy.validate(), new DailyEnergy().init()));
+                    await _DailyEnergy.InsertOneAsync(mergeDailyEnergy(dailyEnergy, new DailyEnergy().init()).validate());
                 }
                 else
                 {//Update   //TODO use mapper for adding
@@ -107,10 +110,13 @@ namespace StatsApi.Services
         public void Remove(String id) =>
             _DailyEnergy.DeleteOne(o => o.Id == id);
 
+        /// <summary>
+        /// Helper function for summing DailyEnergy could be later replaced with automapper
+        /// </summary>
         private DailyEnergy mergeDailyEnergy(DailyEnergy dailyEnergy, DailyEnergy oldDEnergy) 
         {
             dailyEnergy.Body += oldDEnergy.Body;
-            dailyEnergy.Emotional += oldDEnergy.Emotional;
+            dailyEnergy.Emotions += oldDEnergy.Emotions;
             dailyEnergy.Mind += oldDEnergy.Mind;
             dailyEnergy.Soul += oldDEnergy.Soul;
             return dailyEnergy;

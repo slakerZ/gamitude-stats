@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Options;
 using StatsApi.Helpers;
 
@@ -5,29 +6,31 @@ namespace ProjectsApi.Dto.Energy
 {
     public class GetLastWeekAvgEnergyDto
     {
-        private readonly int dayLenght = 1440;
-        public int Emotional { get; set; }
+        public int Emotions { get; set; } = StaticValues.dayLenght;
 
-        public int Soul { get; set; }
+        public int Soul { get; set; } = StaticValues.dayLenght;
 
-        public int Body { get; set; }
+        public int Body { get; set; } = StaticValues.dayLenght;
 
-        public int Mind { get; set; }
+        public int Mind { get; set; } = StaticValues.dayLenght;
+        public int dayCount;
+        /// <summary>
+        /// Calculates the avg adds rest of the week as Max if empty
+        /// </summary>
         public GetLastWeekAvgEnergyDto weekAvg()
         {
-            this.Emotional /= 7;
-            this.Soul /= 7;
-            this.Body /= 7;
-            this.Mind /= 7;
+            this.Emotions = (this.Emotions + ((7 - this.dayCount) * StaticValues.dayLenght)) / 7;
+            this.Soul = (this.Soul + ((7 - this.dayCount) * StaticValues.dayLenght)) / 7;
+            this.Body = (this.Body + ((7 - this.dayCount) * StaticValues.dayLenght)) / 7;
+            this.Mind = (this.Mind + ((7 - this.dayCount) * StaticValues.dayLenght)) / 7;
             return this;
         }
-
         public GetLastWeekAvgEnergyDto scaleToPercent()
         {
-            this.Body /= dayLenght / 100;
-            this.Soul /= dayLenght / 100;
-            this.Emotional /= dayLenght / 100;
-            this.Mind /= dayLenght / 100;
+            this.Body = (this.Body * 100) / StaticValues.dayLenght;
+            this.Soul = (this.Soul * 100) / StaticValues.dayLenght;
+            this.Emotions = (this.Emotions * 100) / StaticValues.dayLenght;
+            this.Mind = (this.Mind * 100) / StaticValues.dayLenght;
             return this;
         }
     }

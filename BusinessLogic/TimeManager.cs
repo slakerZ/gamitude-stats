@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,6 +19,13 @@ namespace StatsApi.BusinessLogic
 
     public class TimeManager : ITimeManager
     {
+        /// <summary>
+        /// This class is responisible for parsing time spend and splitting into energy and stats
+        /// </summary>
+
+        /// <remarks>
+        /// Split this module to energy Manager and Stats Manager
+        /// </remarks>
         private readonly ILogger<TimeManager> _logger;
         private readonly IMapper _mapper;
         private readonly ITimeSpendService _timeSpendsService;
@@ -84,30 +92,29 @@ namespace StatsApi.BusinessLogic
 
         private DailyEnergy calculateEnergyProjectEnergy(Dictionary<STATS, int> wages, int duration)
         {
-            duration >>=2;
+            duration >>= 2;
+            int sum = wages.Sum(x => x.Value);
             return new DailyEnergy
             {
-                Body = duration * wages.GetValueOrDefault(STATS.STRENGTH),
-                Soul = duration * wages.GetValueOrDefault(STATS.FLUENCY),
-                Emotional = duration * wages.GetValueOrDefault(STATS.CREATIVITY),
-                Mind = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE)
+                Body = duration * wages.GetValueOrDefault(STATS.STRENGTH) / sum,
+                Soul = duration * wages.GetValueOrDefault(STATS.FLUENCY) / sum,
+                Emotions = duration * wages.GetValueOrDefault(STATS.CREATIVITY) / sum,
+                Mind = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE) / sum
             };
-
-            throw new System.NotImplementedException();
         }
 
         private DailyEnergy calculateStatsProjectEnergy(Dictionary<STATS, int> wages, int duration)
         {
             duration *= -1;
+            int sum = wages.Sum(x => x.Value);
             return new DailyEnergy
             {
-                Body = duration * wages.GetValueOrDefault(STATS.STRENGTH),
-                Soul = duration * wages.GetValueOrDefault(STATS.FLUENCY),
-                Emotional = duration * wages.GetValueOrDefault(STATS.CREATIVITY),
-                Mind = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE)
+                Body = duration * wages.GetValueOrDefault(STATS.STRENGTH) / sum,
+                Soul = duration * wages.GetValueOrDefault(STATS.FLUENCY) / sum,
+                Emotions = duration * wages.GetValueOrDefault(STATS.CREATIVITY) / sum,
+                Mind = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE) / sum
             };
 
-            throw new System.NotImplementedException();
         }
 
         private DailyStats calculateStats(Dictionary<STATS, int> wages, TimeSpend timeSpend)
@@ -126,25 +133,27 @@ namespace StatsApi.BusinessLogic
 
         private DailyStats calculateEnergyProjectStats(Dictionary<STATS, int> wages, int duration)
         {
-            duration >>=2;
+            duration >>= 2;
+            int sum = wages.Sum(x => x.Value);
             return new DailyStats
             {
-                Strength = duration * wages.GetValueOrDefault(STATS.STRENGTH),
-                Creativity = duration * wages.GetValueOrDefault(STATS.CREATIVITY),
-                Fluency = duration * wages.GetValueOrDefault(STATS.FLUENCY),
-                Intelligence = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE)
+                Strength = duration * wages.GetValueOrDefault(STATS.STRENGTH) / sum,
+                Creativity = duration * wages.GetValueOrDefault(STATS.CREATIVITY) / sum,
+                Fluency = duration * wages.GetValueOrDefault(STATS.FLUENCY) / sum,
+                Intelligence = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE) / sum
             };
         }
 
         private DailyStats calculateStatsProjectStats(Dictionary<STATS, int> wages, int duration)
         {
 
+            int sum = wages.Sum(x => x.Value);
             return new DailyStats
             {
-                Strength = duration * wages.GetValueOrDefault(STATS.STRENGTH),
-                Creativity = duration * wages.GetValueOrDefault(STATS.CREATIVITY),
-                Fluency = duration * wages.GetValueOrDefault(STATS.FLUENCY),
-                Intelligence = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE)
+                Strength = duration * wages.GetValueOrDefault(STATS.STRENGTH) / sum,
+                Creativity = duration * wages.GetValueOrDefault(STATS.CREATIVITY) / sum,
+                Fluency = duration * wages.GetValueOrDefault(STATS.FLUENCY) / sum,
+                Intelligence = duration * wages.GetValueOrDefault(STATS.INTELLIGENCE) / sum
             };
         }
 
