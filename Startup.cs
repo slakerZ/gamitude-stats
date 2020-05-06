@@ -69,9 +69,12 @@ namespace gamitude_stats
             services.AddScoped<IDailyEnergyService, DailyEnergyService>();
             services.AddScoped<IDailyStatsService, DailyStatsService>();
             services.AddScoped<ITimeSpendService, TimeSpendService>();
+            services.AddScoped<IRankService, RankService>();
+            services.AddScoped<IUserRankService, UserRankService>();
 
             //BUSINESSLOGIC SERVICES
             services.AddScoped<ITimeManager, TimeManager>();
+            services.AddScoped<IRankManager, RankManager>();
 
 
             services.AddHttpClient();
