@@ -31,15 +31,21 @@ namespace StatsApi.BusinessLogic
         private readonly ITimeSpendService _timeSpendsService;
         private readonly IDailyStatsService _dailyStatsService;
         private readonly IDailyEnergyService _dailyEnergyService;
-
+        private readonly IRankManager _rankManager;
+        //TODO change to class atributtes
+            // private Dictionary<STATS, int> wages;
+            // private TimeSpend timeSpend;
+            // private int wagesSum;
         public TimeManager(ILogger<TimeManager> logger, IMapper mapper, ITimeSpendService timeSpendsService
-                            , IDailyStatsService dailyStatsService, IDailyEnergyService dailyEnergyService)
+                            , IDailyStatsService dailyStatsService, IDailyEnergyService dailyEnergyService
+                            , IRankManager rankManager)
         {
             _logger = logger;
             _mapper = mapper;
             _timeSpendsService = timeSpendsService;
             _dailyStatsService = dailyStatsService;
             _dailyEnergyService = dailyEnergyService;
+            _rankManager = rankManager;
         }
         public async Task<GetTimeSpend> manageTime(TimeSpend timeSpend)
         {
@@ -51,7 +57,7 @@ namespace StatsApi.BusinessLogic
                 managersTasks.Add(Task.Run(() => manageStatsAsync(wages, timeSpend)));
                 managersTasks.Add(Task.Run(() => _timeSpendsService.CreateAsync(timeSpend)));
                 await Task.WhenAll(managersTasks);
-
+                await _rankManager.manageRank(timeSpend.UserId);
                 return _mapper.Map<GetTimeSpend>(timeSpend);
             }
             catch (Exception e)
