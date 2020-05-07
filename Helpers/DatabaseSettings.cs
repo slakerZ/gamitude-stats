@@ -7,6 +7,8 @@ namespace StatsApi.Helpers
         public String DailyStatsCollectionName { get; set; }
         public String DailyEnergyCollectionName { get; set; }
         public String TimeSpendCollectionName { get; set; }
+        public String RankCollectionName { get; set; }
+        public String UserRankCollectionName { get; set; }
         public String ConnectionString { get; set; }
         public String DatabaseName { get; set; }
     }
@@ -16,6 +18,8 @@ namespace StatsApi.Helpers
         String DailyStatsCollectionName { get; set; }
         String DailyEnergyCollectionName { get; set; }
         String TimeSpendCollectionName { get; set; }
+        String RankCollectionName { get; set; }
+        String UserRankCollectionName { get; set; }
         String ConnectionString { get; set; }
         String DatabaseName { get; set; }
     }
