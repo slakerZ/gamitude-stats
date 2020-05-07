@@ -6,13 +6,13 @@ namespace ProjectsApi.Dto.Energy
 {
     public class GetLastWeekAvgEnergyDto
     {
-        public int Emotions { get; set; } = StaticValues.dayLenght;
+        public int Emotions { get; set; }
 
-        public int Soul { get; set; } = StaticValues.dayLenght;
+        public int Soul { get; set; }
 
-        public int Body { get; set; } = StaticValues.dayLenght;
+        public int Body { get; set; }
 
-        public int Mind { get; set; } = StaticValues.dayLenght;
+        public int Mind { get; set; }
         public int dayCount;
         /// <summary>
         /// Calculates the avg adds rest of the week as Max if empty
