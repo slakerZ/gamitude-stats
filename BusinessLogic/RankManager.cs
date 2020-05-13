@@ -59,14 +59,17 @@ namespace StatsApi.BusinessLogic
         }
         private async Task calculateRank()
         {
-            RANK_TIER tier = RANK_TIER.A;
+            RANK_TIER tier = RANK_TIER.F;
             RANK_DOMINANT dominant = RANK_DOMINANT.BALANCED;
             GAMITUDE_STYLE style = GAMITUDE_STYLE.DEFAULT;
-
-            var sum = stats.Strength + stats.Intelligence + stats.Fluency + stats.Creativity;
-            var max = new List<int> { stats.Strength, stats.Intelligence, stats.Fluency, stats.Creativity }.Max();
-
-            if (max == stats.Strength)
+            var statsList = new List<int> { stats.Strength, stats.Intelligence, stats.Fluency, stats.Creativity };
+            var sum = statsList.Sum();
+            var max = statsList.Max();
+            if(statsList.All(o => o==statsList.First()))
+            {
+                dominant = RANK_DOMINANT.BALANCED;
+            }
+            else if (max == stats.Strength)
             {
                 dominant = RANK_DOMINANT.STRENGHT;
             }
@@ -82,18 +85,14 @@ namespace StatsApi.BusinessLogic
             {
                 dominant = RANK_DOMINANT.CREATIVITY;
             }
-            else
-            {
-                dominant = RANK_DOMINANT.BALANCED;
-            }
 
             if (sum < 40)
             {
-                tier = RANK_TIER.A;
+                tier = RANK_TIER.F;
             }
             else if (sum >= 40 && sum < 90)
             {
-                tier = RANK_TIER.B;
+                tier = RANK_TIER.D;
             }
             else if (sum >= 90 && sum < 150)
             {
@@ -101,11 +100,11 @@ namespace StatsApi.BusinessLogic
             }
             else if (sum >= 150 && sum < 230)
             {
-                tier = RANK_TIER.D;
+                tier = RANK_TIER.B;
             }
             else if (sum >= 230 && sum < 320)
             {
-                tier = RANK_TIER.F;
+                tier = RANK_TIER.A;
             }
             else if (sum >= 320)
             {
