@@ -8,9 +8,9 @@ namespace ProjectsApi.Dto.Rank
 
         public GAMITUDE_STYLE Style { get; set; }
 
-        public RANK_TIER Tier { get; set; }//TODO Migrate to enum
+        public RANK_TIER Tier { get; set; }
 
-        public RANK_DOMINANT Dominant { get; set; }//TODO Migrate to enum
+        public RANK_DOMINANT Dominant { get; set; }
                  
         public string ImageUrl { get; set; }
     }

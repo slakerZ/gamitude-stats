@@ -14,7 +14,7 @@ namespace StatsApi.Services
 
     public interface IUserRankService
     {
-        Task<Rank> GetUserRankByUserId(String userId);
+        Task<Rank> GetRankByUserId(String userId);
         Task UpdateAsync(UserRank userRank);
         Task CreateAsync(String userId);
     }
@@ -41,10 +41,20 @@ namespace StatsApi.Services
                 UserId = userId,
                 RankId = await _ranksService.GetIdByTierDominantAsync(RANK_TIER.F, RANK_DOMINANT.BALANCED, GAMITUDE_STYLE.DEFAULT)
             });
-        public async Task UpdateAsync(UserRank userRank) =>
-            await _UserRank.ReplaceOneAsync(o => o.Id == userRank.Id, userRank);
 
-        public async Task<Rank> GetUserRankByUserId(String userId)
+        public async Task UpdateAsync(UserRank userRank) {
+            var olduserRank =  await GetUserRankByUserId(userRank.UserId);
+            userRank.Id = olduserRank.Id;
+            await _UserRank.ReplaceOneAsync(o => o.Id == userRank.Id, userRank,new ReplaceOptions{IsUpsert=true});
+        }
+
+        private Task<UserRank> GetUserRankByUserId(String userId)
+        {
+            return _UserRank.Find<UserRank>(o => o.UserId == userId).FirstOrDefaultAsync();
+            
+        }
+
+        public async Task<Rank> GetRankByUserId(String userId)
         {
             var userRank = _UserRank.Find<UserRank>(o => o.UserId == userId).FirstOrDefault();
             return await _ranksService.GetAsync(userRank.RankId);

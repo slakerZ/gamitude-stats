@@ -49,7 +49,7 @@ namespace StatsApi.Controllers
                 {
                     return new ControllerResponse<GetRank>
                     {
-                        data = _mapper.Map<GetRank>(await _userRankService.GetUserRankByUserId(userId))
+                        data = _mapper.Map<GetRank>(await _userRankService.GetRankByUserId(userId))
                     };
                 }
                 else
