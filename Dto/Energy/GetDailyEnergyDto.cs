@@ -6,14 +6,13 @@ namespace ProjectsApi.Dto.Energy
 {
     public class GetDailyEnergyDto
     {
-        public int Emotions { get; set; }
+        public int Emotions { get; set; }  = StaticValues.dayLenght;
 
-        public int Soul { get; set; }
+        public int Soul { get; set; } = StaticValues.dayLenght;
 
-        public int Body { get; set; }
+        public int Body { get; set; } = StaticValues.dayLenght;
 
-        public int Mind { get; set; }
-        public int dayCount;
+        public int Mind { get; set; } = StaticValues.dayLenght;
         public GetDailyEnergyDto scaleToPercent()
         {
             this.Body = (this.Body * 100) / StaticValues.dayLenght;
