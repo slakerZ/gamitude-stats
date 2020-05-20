@@ -61,7 +61,7 @@ namespace StatsApi.Services
         }
         public async Task<GetDailyStatsDto> GetDailyStatsByUserIdAsync(string userId)
         {
-            var stats = await _DailyStats.Find<DailyStats>(DailyStats => DailyStats.UserId == userId).FirstOrDefaultAsync();
+            var stats = await _DailyStats.Find<DailyStats>(o => o.Date == DateTime.UtcNow.Date && o.UserId == userId).FirstOrDefaultAsync();
             return stats != null ? _mapper.Map<GetDailyStatsDto>(stats) : new GetDailyStatsDto();
         }
 

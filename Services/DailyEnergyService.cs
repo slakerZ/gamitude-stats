@@ -65,7 +65,7 @@ namespace StatsApi.Services
         }
         public async Task<GetDailyEnergyDto> GetDailyEnergyByUserIdAsync(string userId)
         {
-            var energy = await _DailyEnergy.Find<DailyEnergy>(o => o.UserId == userId).FirstOrDefaultAsync();
+            var energy = await _DailyEnergy.Find<DailyEnergy>(o => o.Date == DateTime.UtcNow.Date && o.UserId == userId).FirstOrDefaultAsync();
             return energy != null ? _mapper.Map<GetDailyEnergyDto>(energy) : new GetDailyEnergyDto(); 
         }
 
