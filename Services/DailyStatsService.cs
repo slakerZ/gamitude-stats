@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using ProjectsApi.Dto.Stats;
 using MongoDB.Driver.Linq;
 using StatsApi.Helpers;
+using AutoMapper;
 
 namespace StatsApi.Services
 {
@@ -15,6 +16,7 @@ namespace StatsApi.Services
     public interface IDailyStatsService
     {
         Task<GetLastWeekAvgStatsDto> GetLastWeekAvgStatsByUserIdAsync(String userId);
+        Task<GetDailyStatsDto> GetDailyStatsByUserIdAsync(String userId);
         DailyStats GetDailyStatsByUserId(String userId);
         DailyStats Get(String id);
         DailyStats Create(DailyStats dailyStats);
@@ -29,14 +31,16 @@ namespace StatsApi.Services
     public class DailyStatsService : IDailyStatsService
     {
         private readonly IMongoCollection<DailyStats> _DailyStats;
+        private readonly IMapper _mapper;
         private readonly ILogger<DailyStatsService> _logger;
 
-        public DailyStatsService(IDatabaseSettings settings, ILogger<DailyStatsService> logger)
+        public DailyStatsService(IMapper mapper, IDatabaseSettings settings, ILogger<DailyStatsService> logger)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _DailyStats = database.GetCollection<DailyStats>(settings.DailyStatsCollectionName);
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -52,10 +56,14 @@ namespace StatsApi.Services
                      Intelligence = o.Sum(o => o.Intelligence),
                      Strength = o.Sum(o => o.Strength)
 
-                 }).FirstOrDefaultAsync()?? new GetLastWeekAvgStatsDto();;
+                 }).FirstOrDefaultAsync() ?? new GetLastWeekAvgStatsDto();
             return stats.weekAvg().scaleToPercent();
         }
-
+        public async Task<GetDailyStatsDto> GetDailyStatsByUserIdAsync(string userId)
+        {
+            var stats = await _DailyStats.Find<DailyStats>(DailyStats => DailyStats.UserId == userId).FirstOrDefaultAsync();
+            return stats != null ? _mapper.Map<GetDailyStatsDto>(stats) : new GetDailyStatsDto();
+        }
 
         public DailyStats GetDailyStatsByUserId(string userId) =>
             _DailyStats.Find<DailyStats>(DailyStats => DailyStats.UserId == userId).FirstOrDefault();
@@ -107,6 +115,7 @@ namespace StatsApi.Services
 
         public void Remove(string id) =>
             _DailyStats.DeleteOne(o => o.Id == id);
+
 
     }
 }

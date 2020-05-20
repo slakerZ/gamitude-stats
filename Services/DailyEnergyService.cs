@@ -8,6 +8,7 @@ using ProjectsApi.Dto.Energy;
 using MongoDB.Driver.Linq;
 using StatsApi.Helpers;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 
 namespace StatsApi.Services
 {
@@ -15,6 +16,7 @@ namespace StatsApi.Services
     public interface IDailyEnergyService
     {
         Task<GetLastWeekAvgEnergyDto> GetLastWeekAvgEnergyByUserIdAsync(String userId);
+        Task<GetDailyEnergyDto> GetDailyEnergyByUserIdAsync(String userId);
         DailyEnergy GetDailyEnergyByUserId(String userId);
         DailyEnergy Get(String id);
         DailyEnergy Create(DailyEnergy dailyEnergy);
@@ -29,14 +31,16 @@ namespace StatsApi.Services
     public class DailyEnergyService : IDailyEnergyService
     {
         private readonly IMongoCollection<DailyEnergy> _DailyEnergy;
+        private readonly IMapper _mapper;
         private readonly ILogger<DailyEnergyService> _logger;
 
-        public DailyEnergyService(IDatabaseSettings settings, ILogger<DailyEnergyService> logger)
+        public DailyEnergyService(IMapper mapper, IDatabaseSettings settings, ILogger<DailyEnergyService> logger)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _DailyEnergy = database.GetCollection<DailyEnergy>(settings.DailyEnergyCollectionName);
+            _mapper = mapper;
             _logger = logger;
         }
         /// <summary>
@@ -59,6 +63,12 @@ namespace StatsApi.Services
                  
             return energy.weekAvg().scaleToPercent();
         }
+        public async Task<GetDailyEnergyDto> GetDailyEnergyByUserIdAsync(string userId)
+        {
+            var energy = await _DailyEnergy.Find<DailyEnergy>(o => o.UserId == userId).FirstOrDefaultAsync();
+            return energy != null ? _mapper.Map<GetDailyEnergyDto>(energy) : new GetDailyEnergyDto(); 
+        }
+
 
         public DailyEnergy GetDailyEnergyByUserId(String userId) =>
             _DailyEnergy.Find<DailyEnergy>(o => o.UserId == userId).FirstOrDefault();
@@ -121,6 +131,7 @@ namespace StatsApi.Services
             dailyEnergy.Soul += oldDEnergy.Soul;
             return dailyEnergy;
         }
+
 
     }
 }

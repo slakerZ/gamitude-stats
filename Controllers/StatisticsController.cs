@@ -33,7 +33,7 @@ namespace StatsApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<ControllerResponse<GetLastWeekAvgStatsDto>>> stats()
+        public async Task<ActionResult<ControllerResponse<GetDailyStatsDto>>> stats()
         {
             try
             {
@@ -41,16 +41,16 @@ namespace StatsApi.Controllers
                 string userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name).ToString();
                 if (null != userId)
                 {
-                    return new ControllerResponse<GetLastWeekAvgStatsDto>
+                    return new ControllerResponse<GetDailyStatsDto>
                     {
-                        data = await _dailyStatsService.GetLastWeekAvgStatsByUserIdAsync(userId)
+                        data = await _dailyStatsService.GetDailyStatsByUserIdAsync(userId)
                     };
                 }
                 else
                 {
                     _logger.LogError("In GET GetStats UserId error");
 
-                    return new ControllerResponse<GetLastWeekAvgStatsDto>
+                    return new ControllerResponse<GetDailyStatsDto>
                     {
                         data = null,
                         message = "UserId error",
@@ -63,7 +63,7 @@ namespace StatsApi.Controllers
             {
                 _logger.LogError("Error cached in StatisticsController GET GetStats {error}", e);
 
-                return new ControllerResponse<GetLastWeekAvgStatsDto>
+                return new ControllerResponse<GetDailyStatsDto>
                 {
                     data = null,
                     message = "something went wrong, sorry:(",
@@ -73,7 +73,7 @@ namespace StatsApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ControllerResponse<GetLastWeekAvgEnergyDto>>> energy()
+        public async Task<ActionResult<ControllerResponse<GetDailyEnergyDto>>> energy()
         {
             try
             {
@@ -82,16 +82,16 @@ namespace StatsApi.Controllers
                 string userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name).ToString();
                 if (null != userId)
                 {
-                    return new ControllerResponse<GetLastWeekAvgEnergyDto>
+                    return new ControllerResponse<GetDailyEnergyDto>
                     {
-                        data = await _dailyEnergyService.GetLastWeekAvgEnergyByUserIdAsync(userId)
+                        data = await _dailyEnergyService.GetDailyEnergyByUserIdAsync(userId)
                     };
                 }
                 else
                 {
                     _logger.LogError("In GET GetEnergy UserId error");
 
-                    return new ControllerResponse<GetLastWeekAvgEnergyDto>
+                    return new ControllerResponse<GetDailyEnergyDto>
                     {
                         data = null,
                         message = "UserId error",
@@ -104,7 +104,7 @@ namespace StatsApi.Controllers
             {
                 _logger.LogError("Error cached in StatisticsController GET GetEnergy {error}", e);
 
-                return new ControllerResponse<GetLastWeekAvgEnergyDto>
+                return new ControllerResponse<GetDailyEnergyDto>
                 {
                     data = null,
                     message = "something went wrong, sorry:(",
