@@ -41,9 +41,10 @@ namespace StatsApi.Controllers
                 string userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name).ToString();
                 if (null != userId)
                 {
+                    var stats = await _dailyStatsService.GetDailyStatsByUserIdAsync(userId);
                     return new ControllerResponse<GetDailyStatsDto>
                     {
-                        data = await _dailyStatsService.GetDailyStatsByUserIdAsync(userId)
+                        data = stats.scaleToPercent()
                     };
                 }
                 else
@@ -82,9 +83,10 @@ namespace StatsApi.Controllers
                 string userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name).ToString();
                 if (null != userId)
                 {
+                    var energy = await _dailyEnergyService.GetDailyEnergyByUserIdAsync(userId);
                     return new ControllerResponse<GetDailyEnergyDto>
                     {
-                        data = await _dailyEnergyService.GetDailyEnergyByUserIdAsync(userId)
+                        data = energy.scaleToPercent()
                     };
                 }
                 else
